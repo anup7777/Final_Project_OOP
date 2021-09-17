@@ -183,4 +183,106 @@ public class ConverterPanell extends JPanel {
 
         return menuBar;
     }
+    //method to load and calculate file show error message
+    void loadCurrencyFile(File userSelectedFile) {
+
+        try {
+
+            BufferedReader inputFromFile =
+                    new BufferedReader(new InputStreamReader(new FileInputStream(userSelectedFile), StandardCharsets.UTF_8));
+
+            //reading file line by line
+            String line = inputFromFile.readLine();
+
+            //creating and initializing the integer
+            int counterForFactors = 0;
+            int counterForSymbols = 0;
+
+            //removing the pre-existing items from the combo box after loading file
+            ComboBox.removeAllItems();
+
+            while ( line != null ) {
+
+                //check the number of parts in a line
+                String [] parts = line.split(",");
+
+                //checking to make sure there are only three parts in a line
+                if (parts.length < 3) {
+                    JOptionPane.showMessageDialog(null, "Invalid number of data values!\n" +  //show error message if there are less than three item
+                                    "symbol) in a line of the file!",
+                            "ERROR!", JOptionPane.ERROR_MESSAGE);
+                    ComboBox.addItem("Invalid data ");
+                    newFactors[counterForFactors] = 0.0;
+                    newSymbols[counterForSymbols] = "Invalid";
+                    counterForFactors++;
+                    counterForSymbols++;
+                }else {
+
+                    for(int i = 0; i < parts.length; i++){
+                        if (i == 0) {
+
+                            ComboBox.addItem(parts[i].trim());
+                        }else if (i == 1){
+
+                            try{
+                                newFactors[counterForFactors] = Double.parseDouble(parts[i].trim());
+                                counterForFactors++;
+                            }catch (Exception e){
+                                JOptionPane.showMessageDialog(null,
+                                        "There was invalid value for the conversion factor "
+                                                + e.getMessage() + ".", "ERROR!", JOptionPane.ERROR_MESSAGE);
+
+                                ComboBox.removeItemAt(ComboBox.getItemCount() - 1);
+                                ComboBox.addItem("Invalid data");
+                                newFactors[counterForFactors] = 0.0;
+                                newSymbols[counterForSymbols] = "Invalid";
+                                counterForFactors++;
+                                counterForSymbols++;
+
+                                break;
+                            }
+                        }else {
+
+                            String fileSymbol = parts[i].trim();
+
+
+                            boolean symbolDoesExist = false;
+                            for(String symbol : testSymbols){
+                                if (fileSymbol.equals(symbol)){
+                                    newSymbols[counterForSymbols] = fileSymbol;
+                                    counterForSymbols++;
+                                    symbolDoesExist = true;
+                                }
+                            }
+                            if (!symbolDoesExist){
+                                JOptionPane.showMessageDialog(null, "Invalid currency " +
+                                                "symbol from the file has been found! \""
+                                                + fileSymbol + "\".",
+                                        "ERROR!", JOptionPane.ERROR_MESSAGE);
+                                ComboBox.removeItemAt(ComboBox.getItemCount() - 1);
+                                ComboBox.addItem("Invalid data");
+
+                                newFactors[counterForFactors - 1] = 0.0;
+                                newSymbols[counterForSymbols] = "Invalid";
+                                counterForFactors++;
+                                counterForSymbols++;
+                            }
+                        }
+                    }
+                }
+                line = inputFromFile.readLine();
+            }
+
+            inputFromFile.close();
+
+        } catch (Exception e) {
+
+            String errorMessage = e.getMessage();
+
+            JOptionPane.showMessageDialog(null, errorMessage,
+                    "ERROR!", JOptionPane.ERROR_MESSAGE);
+        }
+
+    }
+
 }
