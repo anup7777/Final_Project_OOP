@@ -284,5 +284,87 @@ public class ConverterPanell extends JPanel {
         }
 
     }
+    //calculating the units
+    private double getConversionFactor(int indexPosition, boolean isChecked){
+
+        //creating and initializing the factor of currency
+        double factor = 0;
+
+        // Setup the correct factor values depending on required conversion
+        switch(indexPosition){
+            case 0:
+                factor = startingFactors[0];
+                break;
+            case 1:
+                factor = startingFactors[1];
+                break;
+            case 2:
+                factor = startingFactors[2];
+                break;
+            case 3:
+                factor = startingFactors[3];
+                break;
+            case 4:
+                factor = startingFactors[4];
+                break;
+            case 5:
+                factor = startingFactors[5];
+                break;
+            case 6:
+                factor = startingFactors[6];
+                break;
+            case 7:
+                factor = startingFactors[7];
+                break;
+        }
+
+        if (isChecked){
+            symbolForResult = "Â£";
+        }else {
+            symbolForResult = startingSymbols[indexPosition];
+        }
+
+        return factor;
+    }
+
+    private double getNewFactors(int indexPosition, boolean isChecked){
+
+        double factor = 0;
+
+        if (isChecked){
+            symbolForResult = "Â£";
+        }else {
+            symbolForResult = newSymbols[indexPosition];
+        }
+
+        switch(indexPosition){
+            case 0:
+                factor = newFactors[0];
+                break;
+            case 1:
+                factor = newFactors[1];
+                break;
+            case 2:
+                factor = newFactors[2];
+                break;
+            case 3:
+                factor = newFactors[3];
+                break;
+            case 4:
+                factor = newFactors[4];
+                break;
+            case 5:
+                factor = newFactors[5];
+                break;
+            case 6:
+                factor = newFactors[6];
+                break;
+            case 7:
+                factor = newFactors[7];
+                break;
+        }
+        return factor;
+    }
+
 
 }
