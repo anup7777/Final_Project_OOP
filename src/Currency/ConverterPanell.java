@@ -366,5 +366,62 @@ public class ConverterPanell extends JPanel {
         return factor;
     }
 
+    private class ShowButtonListener implements ActionListener{
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if(e.getSource()==ShowButton){
+                JFrame jr = new JFrame("Data Displayed");
+
+
+                DefaultTableModel model= new DefaultTableModel();
+                JTable jt= new JTable(model);
+                Font fon=new Font("Dialog", Font.BOLD, 22);
+                Font fon1=new Font("Serif", Font.BOLD, 18);
+                jt.setFont(fon1);
+                jt.setRowHeight(40);
+                jt.setBackground(new Color(211,244,252));
+                model.addColumn("Currency");
+                model.addColumn("Entered Amount");
+                model.addColumn("Converted Amount");
+                JTableHeader header = jt.getTableHeader();
+                header.setFont(fon);
+                header.setBackground(Color.black);
+                header.setForeground(Color.white);
+                jt.getTableHeader().setPreferredSize(new Dimension(100,50));
+
+                try {
+                    DbOperation db=new DbOperation();
+                    String query="select * from display";
+                    ResultSet rs=db.select(query);
+                    // DefaultTableModel model=(DefaultTableModel)jt.getModel();
+                    //model.setRowCount(0);
+//        	model.fireTableDataChanged();
+//        	jt.repaint();
+                    int i=0;
+
+                    while(rs.next()){
+                        System.out.println(rs.getString(1)+" "+rs.getString(2));
+                        model.addRow(new Object[]{rs.getString(1), rs.getString(2),rs.getString(3)});
+
+//            	((AbstractTableModel) jt.getModel()).fireTableCellUpdated(1, 0);
+
+                    }
+                } catch (Exception er) {
+                    System.out.println(er.getMessage());
+                }
+                JScrollPane pg = new JScrollPane(jt);
+                pg.setBounds(0,0,1220,480);
+                jr.add(pg);
+
+                jr.setSize(1235,520);
+                jr.setLayout(null);
+                jr.setVisible(true);
+
+            }
+        }
+    }
+
+
 
 }
