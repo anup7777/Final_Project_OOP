@@ -422,6 +422,88 @@ public class ConverterPanell extends JPanel {
         }
     }
 
+    //event handler for convert button and calculating the currency
+    private class ConvertButtonListener implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent event) {
+
+
+            String text = InputTextField.getText().trim();
+
+
+            if (!text.isEmpty() && !reverseCheckBox.isSelected()) {
+
+                double value = 0;
+
+                try{
+                    value = Double.parseDouble(text.trim());
+                }catch (Exception e){
+                    JOptionPane.showMessageDialog(null,
+                            "You have entered an invalid number.",
+                            "WARNING",
+                            JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+
+                double factor = usingCurrencyFromFile ? getNewFactors(ComboBox.getSelectedIndex(), false)
+                        : getConversionFactor(ComboBox.getSelectedIndex(), false);
+                double result;
+                result = value * factor;
+                String resultIn2dp = String.format("%.2f", result);
+                conversionResult.setText(symbolForResult + resultIn2dp);
+                conversionCount++;
+                numberOfConversion.setText("Conversion count: " + conversionCount);
+                String combo = (String) ComboBox.getSelectedItem();
+                System.out.println(combo);
+                String entamount = InputTextField.getText();
+                System.out.println(entamount);
+                String conamount = conversionResult.getText();
+                System.out.println(conamount);
+                DbOperation db=new DbOperation();
+                String query="insert into display(currency,enteramount,convertamount)"
+                        + " values('"+combo+"','"+entamount+"','"+conamount+"')";
+                int ans= db.insert(query);
+            } else if (!text.isEmpty() && reverseCheckBox.isSelected()){
+
+                double value = 0;
+
+                try{
+                    value = Double.parseDouble(text.trim());
+
+                }catch (Exception e){
+                    JOptionPane.showMessageDialog(null,
+                            "You have entered an invalid number. " +
+                                    "Please enter a valid number.",
+                            "WARNING",
+                            JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+
+                double factor = usingCurrencyFromFile ? getNewFactors(ComboBox.getSelectedIndex(),
+                        true)
+                        : getConversionFactor(ComboBox.getSelectedIndex(), true);
+                double result;
+
+                result = value / factor;
+                String resultIn2dp = String.format("%.2f", result);
+                conversionResult.setText(symbolForResult + resultIn2dp);
+                conversionCount++;
+                numberOfConversion.setText("Conversion count: " + conversionCount);
+
+
+
+            }else {
+
+                JOptionPane.showMessageDialog(null,
+                        "The TextField should not be empty.",
+                        "WARNING",
+                        JOptionPane.WARNING_MESSAGE);
+            }
+        }
+    }
+
+
 
 
 }
