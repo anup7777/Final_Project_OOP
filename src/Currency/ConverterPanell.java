@@ -76,7 +76,7 @@ public class ConverterPanell extends JPanel {
         //Creating and adding button for conversion
         convertButton = new JButton("Convert");
         convertButton.setBounds(105, 250, 100, 30);
-        convertButton.setBackground(new Color(10, 2, 2));
+        convertButton.setBackground(Color.BLACK);
         convertButton.setForeground(Color.WHITE);
         add(convertButton);
         convertButton.setToolTipText("press here to convert");
@@ -180,6 +180,26 @@ public class ConverterPanell extends JPanel {
         JMenu help = new JMenu("Help");
         menuBar.add(help);
         help.setToolTipText("press here to get help");
+
+        //creating and adding edit menu item to the help menu
+        JMenuItem edit = new JMenuItem("Edit");
+        help.add(edit);
+        edit.setToolTipText("press here to edit program");
+
+        //creating adding about menu item to the about menu
+        JMenuItem about = new JMenuItem("About");
+        help.add(about);
+        help.setToolTipText("click here to find about the program");  //adding tooltip
+        about.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, InputEvent.CTRL_MASK));
+        about.setIcon(new ImageIcon(("about.png"))); //add icon
+
+        //adding action listener to the about menu item to show the dialogue box
+        about.addActionListener(e->
+        {JOptionPane.showMessageDialog(this, "Currency conversion application for common users with several units.\n@anup 2021\n@TBC Kathmandu ");});
+
+        //adding action listener to the load menu
+        ActionListener loadListener = new LoadMenuItemListener();
+        load.addActionListener(loadListener);
 
         return menuBar;
     }
@@ -392,7 +412,7 @@ public class ConverterPanell extends JPanel {
 
                 try {
                     DbOperation db=new DbOperation();
-                    String query="select * from display";
+                    String query="select * from converter";
                     ResultSet rs=db.select(query);
                     // DefaultTableModel model=(DefaultTableModel)jt.getModel();
                     //model.setRowCount(0);
@@ -461,7 +481,7 @@ public class ConverterPanell extends JPanel {
                 String conamount = conversionResult.getText();
                 System.out.println(conamount);
                 DbOperation db=new DbOperation();
-                String query="insert into display(currency,enteramount,convertamount)"
+                String query="insert into converter(currency,enteramount,convertamount)"
                         + " values('"+combo+"','"+entamount+"','"+conamount+"')";
                 int ans= db.insert(query);
             } else if (!text.isEmpty() && reverseCheckBox.isSelected()){
@@ -503,6 +523,25 @@ public class ConverterPanell extends JPanel {
         }
     }
 
+    //loading file through load menu
+    private class LoadMenuItemListener implements ActionListener{
+        //action event handler
+        @Override
+        public void actionPerformed(ActionEvent e) {
+
+            JFileChooser jfc = new JFileChooser();  //creating object of file choose
+
+            int userOption = jfc.showDialog(null,"Select file");
+            jfc.setVisible(true);
+
+            if (userOption == JFileChooser.APPROVE_OPTION) {
+                File file = jfc.getSelectedFile();
+                loadCurrencyFile(file);
+                InputTextField.setText("");
+                conversionResult.setText(" ");
+            }
+        }
+    }
 
 
 
