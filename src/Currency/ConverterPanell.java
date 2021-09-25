@@ -11,6 +11,7 @@ import java.awt.event.KeyEvent;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.sql.ResultSet;
+import javax.swing.ImageIcon;
 
 public class ConverterPanell extends JPanel {
     //creating object of Currency class
@@ -32,7 +33,8 @@ public class ConverterPanell extends JPanel {
     private JTextField InputTextField;
     private JTextField conversionResult;
     private JLabel numberOfConversion;
-    private JLabel lblFrom, to, from;
+    private JLabel lblFrom, to, from,lbl_img,lb;
+    private ImageIcon image_currency;
     private JCheckBox reverseCheckBox;
     private JButton resetButton, ShowButton;
     private JButton convertButton;
@@ -43,15 +45,24 @@ public class ConverterPanell extends JPanel {
     ConverterPanell() {
         //set the layout and the background color
         setLayout(null);
-        setBackground(Color.LIGHT_GRAY);
+        setBackground(Color.green);
 
         numberOfConversion = new JLabel("Conversion count: 0");  //label to display the number of conversion
 
         fon1 = new Font("arial", Font.BOLD, 22);
 
+        /*JLabel lb = new JLabel("");
+        lb.setBackground(Color.black);
+        lb.setOpaque(true);*/
+
+        /*image_currency = new ImageIcon(getClass().getResource("curren.png"));
+        lbl_img = new JLabel(image_currency);
+        lbl_img.setBounds(0, 0, 500, 600);
+        add(lbl_img);*/
+
         //set the label for To in combo Box
         lblFrom = new JLabel("To:");
-        lblFrom.setBounds(70, 20, 350, 50);
+        lblFrom.setBounds(70, 15, 350, 50);
         lblFrom.setForeground(Color.BLUE);
         lblFrom.setFont(fon1);
         add(lblFrom);

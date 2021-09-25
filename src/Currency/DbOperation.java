@@ -21,7 +21,7 @@ public class DbOperation {
             if (con != null) {
                 System.out.println("connected");
                 st = con.createStatement();
-//                  con.commit();
+//
             }
         } catch (Exception e) {
             // TODO Auto-generated catch block
@@ -33,8 +33,6 @@ public class DbOperation {
         try {
 
             val = st.executeUpdate(query);
-            con.commit();
-            con.close();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
 
@@ -47,8 +45,6 @@ public class DbOperation {
     public ResultSet select(String query) {
         try {
             rows = st.executeQuery(query);
-            con.commit();
-            con.close();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
 
